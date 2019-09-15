@@ -1,0 +1,88 @@
+import pandas as pd
+import sys
+data = pd.read_csv('C:/Users/11816/Desktop/mechine learning/HW3/HY_Universe_corporate bond.csv')
+print(data.shape)
+sys.stdout.write("Number of Rows of Data = " + str(data.shape[0]) + '\n')
+sys.stdout.write("Number of Columns of Data = " + str(data.shape[1]))
+
+data.info()
+
+byticker = data.groupby("S_and_P")
+byticker["Coupon"].describe()
+
+import pylab 
+import scipy.stats as stats
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+LiquidityScore = data['LiquidityScore']
+stats.probplot(LiquidityScore, dist="norm", plot=plt)
+plt.show()
+
+from pandas import DataFrame
+import matplotlib.pyplot as plt
+data1 = pd.read_csv('C:/Users/11816/Desktop/mechine learning/HW3/HY_Universe_corporate bond.csv',header=None, prefix="V")
+#print head and tail of data frame
+print(data1.head())
+print(data1.tail())
+
+#print summary of data frame
+summary = data1.describe()
+print(summary)
+
+attribute1 = data.iloc[1:100,27]
+attribute2 = data.iloc[1:100,28]
+plt.scatter(attribute1, attribute2)
+plt.xlabel("percent_intra_dealer")
+plt.ylabel("percent_uncapped")
+plt.show()
+
+corr = DataFrame(data.corr())
+corr
+
+def pearson_r(x, y):
+    """Compute Pearson correlation coefficient between two arrays."""
+    # Compute correlation matrix: corr_mat
+    corr_mat=np.corrcoef(x,y)
+    # Return entry [0,1]
+    return corr_mat[0,1]
+r=pearson_r(data['Coupon'],data['LiquidityScore'])
+print(r)
+
+plt.pcolor(corr)
+plt.show()
+
+_ = plt.hist(data['n_trades'])
+plt.xlabel('n_trades')
+plt.ylabel('count')
+plt.show()
+
+def ecdf(data):
+    """Compute ECDF for a one-dimensional array of measurements."""
+    # Number of data points: n
+    n = len(data)
+
+    # x-data for the ECDF: x
+    x = np.sort(data)
+
+    # y-data for the ECDF: y
+    y = np.arange(1, n+1) / n
+
+    return x, y
+x_vers, y_vers = ecdf(data['n_trades'])
+_=plt.plot(x_vers,y_vers,marker='.',linestyle='none')
+_=plt.xlabel('n_trades')
+_=plt.ylabel('ECDF')
+plt.show()
+
+for i in range(1000):
+    if data.iat[i,36] == 1:
+        pcolor = "red"
+    else:
+        pcolor = "blue"
+#plot rows of data as if they were series data
+dataRow = data.iloc[i,30:36]
+dataRow.plot(color=pcolor)
+plt.xlabel("Attribute Index")
+plt.ylabel(("Attribute Values"))
+plt.show()
